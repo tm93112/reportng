@@ -15,24 +15,14 @@
 //=============================================================================
 package org.uncommons.reportng;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import org.testng.IInvokedMethod;
-import org.testng.ISuite;
-import org.testng.ISuiteResult;
-import org.testng.ITestContext;
-import org.testng.ITestNGMethod;
-import org.testng.ITestResult;
-import org.testng.Reporter;
-import org.testng.SkipException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import com.sun.corba.se.spi.activation.IIOP_CLEAR_TEXT;
+import org.testng.*;
 
 /**
  * Utility class that provides various helper methods that can be invoked
@@ -43,6 +33,7 @@ public class ReportNGUtils
 {
     private static final NumberFormat DURATION_FORMAT = new DecimalFormat("#0.000");
     private static final NumberFormat PERCENTAGE_FORMAT = new DecimalFormat("#0.00%");
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
 
     /**
      * Returns the aggregate of the elapsed times for each test result.
@@ -60,6 +51,30 @@ public class ReportNGUtils
         duration += getDuration(context.getFailedTests().getAllResults());
         return duration;
     }
+
+    public Date getStartDate(ITestContext context){return context.getStartDate();}
+
+    public Date getEndDate(ITestContext context){return context.getEndDate();}
+
+    public Date getEarlierDate(Date date1, Date date2)
+    {
+        if(date1.before(date2)){
+            return date1;
+        } else{
+            return date2;
+        }
+    }
+
+    public Date getLaterDate(Date date1, Date date2)
+    {
+        if(date1.after(date2)){
+            return date1;
+        } else{
+            return date2;
+        }
+    }
+
+    public String formatDate(Date date){return DATE_FORMAT.format(date);}
 
 
     /**
@@ -235,6 +250,9 @@ public class ReportNGUtils
 
     public boolean hasGroups(ISuite suite)
     {
+        for(ITestNGMethod method : suite.getAllMethods()){
+
+        }
         return !suite.getMethodsByGroups().isEmpty();
     }
 
@@ -379,7 +397,6 @@ public class ReportNGUtils
         }
         return startTime;
     }
-
 
     public long getEndTime(ISuite suite, IInvokedMethod method, List<IInvokedMethod> methods)
     {

@@ -36,7 +36,7 @@
   #set ($totalSkipped = 0)
   #set ($totalFailed = 0)
   <tr>
-    <th colspan="6" class="header suite">
+    <th colspan="8" class="header suite">
       <div class="suiteLinks">
         #if (!$suite.invokedMethods.empty)
         ##<a href="suite${suiteId}_chronology.html">$messages.getString("chronology")</a>
@@ -50,6 +50,8 @@
   </tr>
   <tr class="columnHeadings">
     <td>&nbsp;</td>
+    <th>$messages.getString("startTime")</th>
+    <th>$messages.getString("endTime")</th>
     <th>$messages.getString("duration")</th>
     <th>$messages.getString("passed")</th>
     <th>$messages.getString("skipped")</th>
@@ -69,6 +71,12 @@
   <tr class="test">
     <td class="test">
       <a href="suite${suiteId}_test${velocityCount}_results.html">${result.testContext.name}</a>
+    </td>
+    <td class="startTime">
+      $utils.formatDate($utils.getStartDate($result.testContext))
+    </td>
+    <td class="endTime">
+      $utils.formatDate($utils.getEndDate($result.testContext))
     </td>
     <td class="duration">
       $utils.formatDuration($utils.getDuration($result.testContext))s
@@ -104,8 +112,18 @@
   #end
   #end
 
+    #set ($startDate = $cal)
+    #set ($endDate = $cal)
+    #foreach ($result in $suite.results)
+      #set ($startDate = $utils.getEarlierDate($startDate, $utils.getStartDate($result.testContext)))
+      #set ($endDate = $utils.getLaterDate($endDate, $utils.getEndDate($result.testContext)))
+    #end
+
     <tr class="suite">
-    <td colspan="2" class="totalLabel">$messages.getString("total")</td>
+    <td colspan="1" class="totalLabel">$messages.getString("total")</td>
+    <td class="startTime number">$utils.formatDate($startDate)</td>
+    <td class="endTime number">$utils.formatDate($endDate)</td>
+    <td class="totalLabel"></td>
 
     #if ($totalPassed > 0)
     <td class="passed number">$totalPassed</td>

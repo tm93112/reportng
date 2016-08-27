@@ -27,7 +27,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.ResourceBundle;
+
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.testng.IReporter;
@@ -59,6 +62,7 @@ public abstract class AbstractReporter implements IReporter
     protected AbstractReporter(String classpathPrefix)
     {
         this.classpathPrefix = classpathPrefix;
+
         Velocity.setProperty("resource.loader", "classpath");
         Velocity.setProperty("classpath.resource.loader.class",
                              "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
@@ -86,7 +90,11 @@ public abstract class AbstractReporter implements IReporter
      */
     protected VelocityContext createContext()
     {
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
         VelocityContext context = new VelocityContext();
+        context.put("cal", cal.getTime());
         context.put(META_KEY, META);
         context.put(UTILS_KEY, UTILS);
         context.put(MESSAGES_KEY, MESSAGES);

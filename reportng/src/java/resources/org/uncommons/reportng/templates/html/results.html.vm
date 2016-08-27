@@ -54,6 +54,11 @@
       <tr>
         <td colspan="3" class="group">$testClass.name</td>
       </tr>
+      <tr class="suite">
+        <th>Test Method</th>
+        <th>Duration</th>
+        <th>Steps and Results</th>
+      </tr>
       #set ($classResults = $failedTests.get($testClass))
       #parse ("org/uncommons/reportng/templates/html/class-results.html.vm")
     #end
@@ -67,6 +72,11 @@
       <tr>
         <td colspan="3" class="group">$testClass.name</td>
       </tr>
+      <tr class="suite">
+        <th>Test Method</th>
+        <th>Duration</th>
+        <th>Steps and Results</th>
+      </tr>
       #set ($classResults = $skippedTests.get($testClass))
       #parse ("org/uncommons/reportng/templates/html/class-results.html.vm")
     #end
@@ -79,6 +89,11 @@
     #foreach ($testClass in $passedTests.keySet())
       <tr>
         <td colspan="3" class="group">$testClass.name</td>
+      </tr>
+      <tr class="suite">
+        <th>Test Method</th>
+        <th>Duration</th>
+        <th>Steps and Results</th>
       </tr>
       #set ($classResults = $passedTests.get($testClass))
       #parse ("org/uncommons/reportng/templates/html/class-results.html.vm")
