@@ -35,6 +35,7 @@ public class ReportNGUtils
     private static final NumberFormat PERCENTAGE_FORMAT = new DecimalFormat("#0.00%");
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
 
+
     /**
      * Returns the aggregate of the elapsed times for each test result.
      * @param context The test results.

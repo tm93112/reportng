@@ -55,7 +55,6 @@ public abstract class AbstractReporter implements IReporter
 
     private final String classpathPrefix;
 
-
     /**
      * @param classpathPrefix Where in the classpath to load templates from.
      */
