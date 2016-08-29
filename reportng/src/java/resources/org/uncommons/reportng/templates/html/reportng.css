@@ -36,6 +36,7 @@ td                       {font-size: 1.3em;}
 .resultsTable .endTime   {width: 11em;}
 .resultsTable td         {vertical-align: top; padding: 0 1em;}
 .resultsTable th         {padding: 0 .5em;}
+.method a                {color: #000000;}
 .number                  {text-align: right;}
 .zero                    {font-weight: normal;}
 .columnHeadings          {font-size: 1em;}
@@ -48,6 +49,7 @@ td                       {font-size: 1.3em;}
 .tests                   {display: table-row-group;}
 .header.suite            {cursor: pointer; clear: right; height: 1.214em; margin-top: 1px;}
 div.test                 {margin-top: 0.1em; clear: right; font-size: 1.3em;}
+.steps                   {cursor: pointer; color: #009933;}
 
 /* The +/- toggle used in the navigation frame. */
 .toggle                  {font-family: monospace; font-weight: bold; padding-left: 2px; padding-right: 5px; color: #777777;}

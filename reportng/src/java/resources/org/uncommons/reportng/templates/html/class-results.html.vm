@@ -8,74 +8,79 @@
   <td class="method">
     #set ($testInstanceName = "")
     #if ($testResult.testName)
-      #set ($testInstanceName = " ($testResult.testName)")
+      #set ($testInstanceName = "($testResult.testName)")
     #end
     #if ($testResult.method.description && $testResult.method.description.length() > 0)
       <span class="description" title="$testResult.method.description">$testResult.name$testInstanceName</span>
     #else
-      $testResult.name$testInstanceName
+      <font id="path-${velocityCount}" style="display: none;">${testClass.name}.</font>
+      <a onclick="toggleElement('path-${velocityCount}', 'inline');">$testResult.name$testInstanceName</a>
     #end
   </td>
   <td class="duration">
     $utils.formatDuration($testResult.startMillis, $testResult.endMillis)s
   </td>
   <td class="result">
-    ## Display the dependencies for skipped test methods.
-    #if ($testResult.status == 3) ## 3 means skipped.
-      #if( $utils.hasDependentGroups($testResult) )
-        <i>$messages.getString("dependsOnGroups"): </i>
-        <span class="dependency">$utils.getDependentGroups($testResult)</span>
-        <br />
-      #end
-      #if ($utils.hasDependentMethods($testResult))
-        <i>$messages.getString("dependsOnMethods"): </i>
-        <span class="dependency">$utils.getDependentMethods($testResult)</span>
-      #end
-      #if ($utils.hasSkipException($testResult))
-      	<i>$messages.getString("skipped.reason"): </i>
-      	<span class="dependency">$utils.getSkipExceptionMessage($testResult)</span>
-      #end
-    #end
-
-    #if ($utils.hasArguments($testResult))
-      <i>$messages.getString("methodArguments"): </i><span class="arguments">$utils.getArguments($testResult)</span><br />
-    #end
-
-    ## Show logger output for the test.
-    #set ($output = $utils.getTestOutput($testResult))
-    #if ($output.size() > 0)
-    <div class="testOutput">
-    #set ($counter = 1)
-      #foreach( $line in $output )
-        #if ($meta.shouldEscapeOutput())
-          $utils.escapeHTMLString($line)<br />
-        #elseif ($line.contains("Go to:") || $line.contains("Log in with") || ($line.contains("Click ") && !$line.contains("here for Screenshot") && !$line.contains("Application JavaScript Errors")) || ($line.contains("Toggle ") && $line.contains(" radio/checkbox")) || ($line.contains("Select ") && $line.contains(" from the ")) || ($line.contains("Type ") && $line.contains(" into the ")) || $line.contains("Turn on control "))
-          $counter. $line
-          #set ($counter = $counter + 1)
-        #else
-          $line
+    <a onclick="toggleElement('steps-${velocityCount}', 'table-row-group')" class="steps header">Click to Expand/Collapse Steps</a>
+    <br>
+    <div id="steps-${velocityCount}" style="display: table-row-group;">
+        ## Display the dependencies for skipped test methods.
+        #if ($testResult.status == 3) ## 3 means skipped.
+          #if( $utils.hasDependentGroups($testResult) )
+            <i>$messages.getString("dependsOnGroups"): </i>
+            <span class="dependency">$utils.getDependentGroups($testResult)</span>
+            <br />
+          #end
+          #if ($utils.hasDependentMethods($testResult))
+            <i>$messages.getString("dependsOnMethods"): </i>
+            <span class="dependency">$utils.getDependentMethods($testResult)</span>
+          #end
+          #if ($utils.hasSkipException($testResult))
+            <i>$messages.getString("skipped.reason"): </i>
+            <span class="dependency">$utils.getSkipExceptionMessage($testResult)</span>
+          #end
         #end
-      #end
-    </div>
-    #end
 
+        #if ($utils.hasArguments($testResult))
+          <i>$messages.getString("methodArguments"): </i><span class="arguments">$utils.getArguments($testResult)</span><br />
+        #end
 
-    #if ($testResult.throwable && ( $testResult.status == 2 || $meta.shouldShowExpectedExceptions()))
-    <a href="javascript:toggleElement('exception-$id', 'block')" title="$messages.getString("clickToExpandCollapse")"><b>$utils.escapeHTMLString( $testResult.throwable.toString() )</b></a><br />
-    <div class="stackTrace" id="exception-$id">
-      #foreach ($element in $testResult.throwable.stackTrace)
-        $utils.escapeHTMLString( $element.toString() )<br />
-      #end
-      #set ($causes = $utils.getCauses($testResult.throwable))
-      #foreach ($throwable in $causes)
-        #set ($id = $id + 1)
-        <b>$messages.getString("causedBy"): </b> <a href="javascript:toggleElement('exception-$id', 'block')" title="Click to expand/collapse">$utils.escapeHTMLString( $throwable.toString() )</a><br />
-        <div class="stackTrace" id="exception-$id">
-          #foreach ($element in $throwable.stackTrace)
-            $utils.escapeHTMLString($element.toString())<br />
+        ## Show logger output for the test.
+        #set ($output = $utils.getTestOutput($testResult))
+        #if ($output.size() > 0)
+        <div class="testOutput">
+        #set ($counter = 1)
+          #foreach( $line in $output )
+            #if ($meta.shouldEscapeOutput())
+              $utils.escapeHTMLString($line)<br />
+            #elseif ($line.contains("Go to:") || $line.contains("Log in with") || ($line.contains("Click ") && !$line.contains("here for Screenshot") && !$line.contains("Application JavaScript Errors")) || ($line.contains("Toggle ") && $line.contains(" radio/checkbox")) || ($line.contains("Select ") && $line.contains(" from the ")) || ($line.contains("Type ") && $line.contains(" into the ")) || $line.contains("Turn on control") || $line.contains("Turn off control") || $line.contains("Switch to role:"))
+              $counter. $line
+              #set ($counter = $counter + 1)
+            #else
+              $line
+            #end
           #end
         </div>
-      #end
+        #end
+
+
+        #if ($testResult.throwable && ( $testResult.status == 2 || $meta.shouldShowExpectedExceptions()))
+        <a href="javascript:toggleElement('exception-$id', 'block')" title="$messages.getString("clickToExpandCollapse")"><b>$utils.escapeHTMLString( $testResult.throwable.toString() )</b></a><br />
+        <div class="stackTrace" id="exception-$id">
+          #foreach ($element in $testResult.throwable.stackTrace)
+            $utils.escapeHTMLString( $element.toString() )<br />
+          #end
+          #set ($causes = $utils.getCauses($testResult.throwable))
+          #foreach ($throwable in $causes)
+            #set ($id = $id + 1)
+            <b>$messages.getString("causedBy"): </b> <a href="javascript:toggleElement('exception-$id', 'block')" title="Click to expand/collapse">$utils.escapeHTMLString( $throwable.toString() )</a><br />
+            <div class="stackTrace" id="exception-$id">
+              #foreach ($element in $throwable.stackTrace)
+                $utils.escapeHTMLString($element.toString())<br />
+              #end
+            </div>
+          #end
+        </div>
     </div>
     #end
     #set ($id = $id + 1)

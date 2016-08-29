@@ -119,6 +119,7 @@
       #set ($endDate = $utils.getLaterDate($endDate, $utils.getEndDate($result.testContext)))
     #end
 
+
     <tr class="suite">
     <td colspan="1" class="totalLabel">$messages.getString("total")</td>
     <td class="startTime number">$utils.formatDate($startDate)</td>
