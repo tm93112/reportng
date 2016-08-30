@@ -13,17 +13,16 @@
     #if ($testResult.method.description && $testResult.method.description.length() > 0)
       <span class="description" title="$testResult.method.description">$testResult.name$testInstanceName</span>
     #else
-      <font id="path-${velocityCount}" style="display: none;">${testClass.name}.</font>
-      <a onclick="toggleElement('path-${velocityCount}', 'inline');">$testResult.name$testInstanceName</a>
+      <a onclick="selectMe(event, '${testClass.name}.$testResult.name$testInstanceName');">$testResult.name$testInstanceName</a>
     #end
   </td>
   <td class="duration">
     $utils.formatDuration($testResult.startMillis, $testResult.endMillis)s
   </td>
   <td class="result">
-    <a onclick="toggleElement('steps-${velocityCount}', 'table-row-group')" class="steps header">Click to Expand/Collapse Steps</a>
+    <a onclick="toggleElement('steps-$id', 'table-row-group')" class="steps header">Click to Expand/Collapse Steps</a>
     <br>
-    <div id="steps-${velocityCount}" style="display: table-row-group;">
+    <div id="steps-$id" style="display: table-row-group;">
         ## Display the dependencies for skipped test methods.
         #if ($testResult.status == 3) ## 3 means skipped.
           #if( $utils.hasDependentGroups($testResult) )
@@ -80,8 +79,8 @@
             </div>
           #end
         </div>
-    </div>
-    #end
+        </div>
+        #end
     #set ($id = $id + 1)
   </td>
 </tr>

@@ -12,3 +12,15 @@ function toggle(toggleId)
     var toggle = document.getElementById ? document.getElementById(toggleId) : document.all[toggleId];
     toggle.textContent = toggle.innerHTML == '\u25b6' ? '\u25bc' : '\u25b6';
 }
+
+ function selectMe(ev, text)
+ {
+     if(ev.ctrlKey)
+     {
+       	copyToClipboard(text);
+     }
+ }
+
+ function copyToClipboard(text) {
+     window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+   }
