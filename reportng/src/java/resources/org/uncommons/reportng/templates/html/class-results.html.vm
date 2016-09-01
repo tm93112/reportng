@@ -20,9 +20,9 @@
     $utils.formatDuration($testResult.startMillis, $testResult.endMillis)s
   </td>
   <td class="result">
-    <a onclick="toggleElement('steps-$id', 'table-row-group')" class="steps header">Click to Expand/Collapse Steps</a>
+    <a onclick="toggleElement('steps-$id', 'table-row-group')" class="steps header">$messages.getString("clickToExpandCollapseSteps")</a>
     <br>
-    <div id="steps-$id" style="display: table-row-group;">
+    <div id="steps-$id" style="display: none;">
         ## Display the dependencies for skipped test methods.
         #if ($testResult.status == 3) ## 3 means skipped.
           #if( $utils.hasDependentGroups($testResult) )
@@ -55,7 +55,7 @@
             #elseif ($line.contains("Go to:") || $line.contains("Log in with") || ($line.contains("Click ") && !$line.contains("here for Screenshot") && !$line.contains("Application JavaScript Errors")) || ($line.contains("Toggle ") && $line.contains(" radio/checkbox")) || ($line.contains("Select ") && $line.contains(" from the ")) || ($line.contains("Type ") && $line.contains(" into the ")) || $line.contains("Turn on control") || $line.contains("Turn off control") || $line.contains("Switch to role:"))
               $counter. $line
               #set ($counter = $counter + 1)
-            #else
+            #elseif (!$line.contains("Previous Result: "))
               $line
             #end
           #end
@@ -83,5 +83,14 @@
         #end
     #set ($id = $id + 1)
   </td>
+  #if($testResult.status == 2)
+      <td class="addInfo">
+        #foreach( $line in $output )
+          #if ($line.contains("Previous Result: "))
+            $line
+          #end
+        #end
+      </td>
+  #end
 </tr>
 #end
