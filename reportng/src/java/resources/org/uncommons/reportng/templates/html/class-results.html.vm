@@ -86,7 +86,7 @@
   #if($testResult.status == 2)
       <td class="addInfo">
         #foreach( $line in $output )
-          #if ($line.contains("Previous Result: "))
+          #if ($line.contains("Previous Result: ") || $line.contains("smartsupport.healthtrio.com/browse"))
             $line
           #end
         #end
